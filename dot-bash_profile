@@ -15,7 +15,7 @@ export VISUAL=/usr/bin/emacs
 #    '@' for symbolic links
 #    '|' for FIFOs
 #    '=' for sockets
-alias ls='ls -F -G'
+alias ls='ls -F -G --color=auto'
 
 # only append to bash history to prevent it from overwriting it when you have
 # multiple ssh windows open

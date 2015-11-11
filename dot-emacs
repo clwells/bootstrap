@@ -152,5 +152,5 @@
 (setq php-warned-bad-indent t)
 
 (setq-default fci-rule-column 80)
-(load-file "~/.emacs.d/fill-column-indicator.el")
+;;(load-file "~/.emacs.d/fill-column-indicator.el")
 ;;(add-hook 'after-change-major-mode-hook 'fci-mode)

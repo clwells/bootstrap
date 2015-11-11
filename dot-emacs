@@ -1,0 +1,156 @@
+;; NEXCESS.NET .emacs files
+
+;; Set up the keyboard so the delete key on both the regular keyboard
+;; and the keypad delete the character under the cursor and to the right
+;; under X, instead of the default, backspace behavior.
+(global-set-key [delete] 'delete-char)
+(global-set-key [kp-delete] 'delete-char)
+
+;; turn on font-lock mode
+(global-font-lock-mode t)
+;; enable visual feedback on selections
+(setq-default transient-mark-mode t)
+
+;; always end a file with a newline
+;;(setq require-final-newline t)
+
+;; stop at the end of the file, not just add lines
+(setq next-line-add-newlines nil)
+
+;; no .blah files
+(setq make-backup-files nil)
+(setq vc-cvs-stay-local nil)
+
+;; no tabs
+(setq-default intend-tabs-mode nil)
+
+;; untabify on write
+(defun untabify-buffer()
+  (interactive)
+  "Untabify the current buffer.  Return nil.
+
+  Must return nil, if added to write-file-hooks."
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "[ \t]+$" nil t)
+      (delete-region (match-beginning 0) (match-end 0)))
+    (goto-char (point-min))
+    (if (search-forward "\t" nil t)
+        (untabify (1- (point)) (point-max))))
+  nil)
+(defun do-on-write-file()
+  (untabify-buffer))
+(add-hook 'write-file-hooks 'do-on-write-file)
+
+;(require 'smarty-mode)
+;(require 'css-mode)
+(require 'generic-x)
+
+;(add-to-list 'auto-mode-alist '("\\.css\\'" . css-mode))
+;(setq cssm-indent-function #'cssm-c-style-indenter)
+;(setq cssm-indent-level '2)
+
+;(autoload 'nuke-trailing-whitespace "whitespace" nil t)
+; Strip whitespace when saving files.  whitespace.el contains a list
+; of modes to operate in.
+; This appears to cause console GNU Emacs to segfault, you have been
+; warned...
+;(add-hook 'write-file-hooks 'nuke-trailing-whitespace)
+
+;(require 'jiggle)
+;(jiggle-mode 1)
+;(setq jiggle-how-many-times 5)
+;(jiggle-searches-too 1)
+
+(setq next-line-add-newlines nil)          ;no newlines if I cursor past EOF.
+
+
+;;;;; font-lock ;;;;;
+;; Font-Lock is a syntax-highlighting package.
+
+(setq font-lock-use-default-fonts nil)
+(setq font-lock-use-default-colors nil)
+(require 'font-lock)
+
+;; Mess around with the faces a bit.  Note that you have
+;; to change the font-lock-use-default-* variables *before*
+;; loading font-lock, and wait till *after* loading font-lock
+;; to customize the faces.
+
+;; string face is green
+;;(set-face-foreground 'font-lock-string-face "yellow")
+
+;; function names are bold green
+;;(copy-face 'bold 'font-lock-function-name-face)
+;;(set-face-foreground 'font-lock-function-name-face "green")
+
+;; comments are green2
+;;(copy-face 'font-lock-comment-face 'font-lock-doc-string-face)
+;;(set-face-foreground 'font-lock-comment-face "green2")
+
+;; misc. faces
+;;(copy-face 'italic 'font-lock-type-face)
+;;(set-face-foreground 'font-lock-keyword-face "orchid")
+;;(set-face-foreground 'font-lock-variable-name-face "white")
+;;(set-face-foreground 'font-lock-type-face "yellow")
+
+
+;;;;; colors ;;;;;
+;; Set other display colors.
+
+;;(set-face-foreground 'highlight "blue")
+;;(set-face-background 'highlight "darkseagreen2")
+
+(load-file "~/.emacs.d/php-mode.el")
+(require 'php-mode)
+(setq auto-mode-alist
+  (append '(("\.php$" . php-mode)
+            ("\.module$" . php-mode))
+              auto-mode-alist))
+
+(add-to-list 'magic-mode-alist '(".*php" . php-mode) )
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(setq column-number-mode t)
+
+;; defines ibuffer-do-replace-string
+(define-ibuffer-op replace-string (from-str to-str)
+  "Perform a `replace-string' in marked buffers."
+  (:interactive
+   (let* ((from-str (read-from-minibuffer "Replace string: "))
+          (to-str (read-from-minibuffer (concat "Replace " from-str
+                                                " with: "))))
+     (list from-str to-str))
+   :opstring "replaced in"
+   :complex t
+   :modifier-p :maybe)
+  (save-window-excursion
+    (switch-to-buffer buf)
+    (save-excursion
+      (goto-char (point-min))
+      (let ((case-fold-search ibuffer-case-fold-search))
+        (while (search-forward from-str nil t)
+          (replace-match to-str nil t))))
+    t))
+
+(defun query-replace-in-open-buffers (arg1 arg2)
+  "query-replace in open files"
+  (interactive "sQuery Replace in open Buffers: \nsquery with: ")
+  (mapcar
+   (lambda (x)
+     (find-file x)
+     (save-excursion
+       (beginning-of-buffer)
+       (query-replace arg1 arg2)))
+   (delq
+    nil
+    (mapcar
+     (lambda (x)
+       (buffer-file-name x))
+     (buffer-list)))))
+
+(setq php-mode-warn-if-mumamo-off nil)
+(setq php-warned-bad-indent t)
+
+(setq-default fci-rule-column 80)
+(load-file "~/.emacs.d/fill-column-indicator.el")
+;;(add-hook 'after-change-major-mode-hook 'fci-mode)

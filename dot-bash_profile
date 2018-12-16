@@ -1,10 +1,6 @@
 export PATH=/usr/local/bin:/usr/local/php5/bin:$PATH
-export EDITOR=emacs
 export GREP_OPTIONS='--color=auto'
 export PAGER=/usr/bin/less
-
-# formatted at 2000-03-14 03:14:15
-export HISTTIMEFORMAT="%F %T "
 
 export EDITOR=/usr/bin/emacs
 export VISUAL=/usr/bin/emacs
@@ -54,8 +50,5 @@ undwht='\[\e[4;37m\]' # White
 txtrst='\[\e[0m\]'    # Text Reset
 
 export PS1="[${txtcyn}\$(date +%H%M)${txtrst}][\u@\h \W]\$ "
-
-alias up='svn up'
-alias st='svn st'
 
 export PATH

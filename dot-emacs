@@ -101,6 +101,12 @@
 ;;(set-face-foreground 'highlight "blue")
 ;;(set-face-background 'highlight "darkseagreen2")
 
+(load-file "~/.emacs.d/puppet-mode.el")
+(require 'puppet-mode)
+(setq auto-mode-alist
+  (append '(("\.pp$" . php-mode))
+              auto-mode-alist))
+
 (load-file "~/.emacs.d/php-mode.el")
 (require 'php-mode)
 (setq auto-mode-alist
@@ -111,6 +117,15 @@
 (add-to-list 'magic-mode-alist '(".*php" . php-mode) )
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (setq column-number-mode t)
+
+(load-file "~/.emacs.d/yaml-mode.el")
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yml.j2\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml.j2\\'" . yaml-mode))
+(add-to-list 'magic-mode-alist '(".*---" . yaml-mode) )
+(add-to-list 'auto-mode-alist '("\\.xml\\'" . xml-mode))
 
 ;; defines ibuffer-do-replace-string
 (define-ibuffer-op replace-string (from-str to-str)
@@ -152,5 +167,5 @@
 (setq php-warned-bad-indent t)
 
 (setq-default fci-rule-column 80)
-;;(load-file "~/.emacs.d/fill-column-indicator.el")
+(load-file "~/.emacs.d/fill-column-indicator.el")
 ;;(add-hook 'after-change-major-mode-hook 'fci-mode)

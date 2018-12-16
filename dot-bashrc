@@ -1,3 +1,14 @@
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+  . /etc/bashrc
+fi
+
+## Source Nexcess functions (needed for nume and me)
+if [ -f /etc/bashrc.nexcess ]; then
+        . /etc/bashrc.nexcess
+fi
+
 export PATH=/usr/local/bin:/usr/local/php5/bin:$PATH
 export GREP_OPTIONS='--color=auto'
 export PAGER=/usr/bin/less
@@ -52,3 +63,17 @@ txtrst='\[\e[0m\]'    # Text Reset
 export PS1="[${txtcyn}\$(date +%H%M)${txtrst}][\u@\h \W]\$ "
 
 export PATH
+
+if [ $UID = 0 ]; then
+    # nexkit bash completion
+    if [ -e '/etc/bash_completion.d/nexkit' ]; then
+  source /etc/bash_completion.d/nexkit
+    fi
+    PS1="[${txtcyn}\$(date +%H%M)${txtrst}][${bldred}\u${txtrst}@\h \W]\$ "
+else
+    PS1="[${txtcyn}\$(date +%H%M)${txtrst}][\u@\h \W]\$ "
+fi
+
+if [ -f /opt/remi/php71/enable ]; then
+  . /opt/remi/php71/enable
+fi
